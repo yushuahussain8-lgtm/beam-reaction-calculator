@@ -4,7 +4,7 @@
 
 ## Live Calculator
 
-Check this super awesomely cool Simply Supported Reaction Calculator directly in your browser.
+Check this super awesomely cool Simply Supported Reaction Calculator Website
 
 [Launch Beam Reaction Calculator](https://yushuahussain8-lgtm.github.io/beam-reaction-calculator/)
 
