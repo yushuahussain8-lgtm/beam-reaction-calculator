@@ -1,6 +1,14 @@
 
 # Beam Reaction Calculator
 
+
+## Live Calculator
+
+Try the interactive calculator directly in your browser:
+
+[Launch Beam Reaction Calculator](https://yushuahussain8-lgtm.github.io/beam-reaction-calculator/)
+
+
 A C-based structural engineering calculator that determines support reactions for a simply supported beam carrying a single downward point load.
 
 ## Features
