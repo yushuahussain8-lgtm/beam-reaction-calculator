@@ -4,7 +4,7 @@
 
 ## Live Calculator
 
-Try the interactive calculator directly in your browser:
+Try this super awesome cool interactive forces calculator directly in a browser.
 
 [Launch Beam Reaction Calculator](https://yushuahussain8-lgtm.github.io/beam-reaction-calculator/)
 
