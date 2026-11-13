@@ -1,0 +1,414 @@
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Beam Reaction Calculator</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f1f5f9;
+    color: #1e293b;
+}
+
+header {
+    background: #14253d;
+    color: white;
+    text-align: center;
+    padding: 35px 20px;
+}
+
+header h1 {
+    margin: 0 0 10px;
+}
+
+header p {
+    color: #cbd5e1;
+}
+
+.container {
+    max-width: 900px;
+    margin: 30px auto;
+    padding: 0 16px;
+}
+
+.card {
+    background: white;
+    border-radius: 12px;
+    padding: 25px;
+    margin-bottom: 22px;
+    box-shadow: 0 3px 12px rgba(0,0,0,0.06);
+}
+
+h2 {
+    margin-top: 0;
+}
+
+.inputs {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
+}
+
+label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: bold;
+}
+
+input {
+    width: 100%;
+    padding: 12px;
+    border: 1px solid #cbd5e1;
+    border-radius: 6px;
+    font-size: 16px;
+}
+
+button {
+    margin-top: 20px;
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 13px 25px;
+    border-radius: 7px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+button:hover {
+    background: #1d4ed8;
+}
+
+.results {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 20px;
+}
+
+.result {
+    background: #eff6ff;
+    border: 1px solid #bfdbfe;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+.result strong {
+    color: #1d4ed8;
+    font-size: 28px;
+}
+
+.diagram {
+    width: 100%;
+    height: auto;
+}
+
+#error {
+    color: #dc2626;
+    font-weight: bold;
+}
+
+.note {
+    color: #64748b;
+    font-size: 14px;
+    line-height: 1.6;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    color: #64748b;
+}
+
+@media (max-width: 600px) {
+    .inputs, .results {
+        grid-template-columns: 1fr;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Beam Reaction Calculator</h1>
+    <p>Structural Engineering | Simply Supported Beams</p>
+</header>
+
+<div class="container">
+
+    <!-- INPUT SECTION -->
+
+    <section class="card">
+
+        <h2>1. Beam Parameters</h2>
+
+        <form id="calculator">
+
+            <div class="inputs">
+
+                <div>
+                    <label for="span">Beam Span (m)</label>
+                    <input type="number" id="span"
+                           value="6" step="any" required>
+                </div>
+
+                <div>
+                    <label for="load">Point Load (kN)</label>
+                    <input type="number" id="load"
+                           value="10" step="any" required>
+                </div>
+
+                <div>
+                    <label for="distance">
+                        Distance from Left Support (m)
+                    </label>
+                    <input type="number" id="distance"
+                           value="2" step="any" required>
+                </div>
+
+            </div>
+
+            <button type="submit">
+                Calculate Reactions
+            </button>
+
+            <p id="error" role="alert"></p>
+
+        </form>
+
+    </section>
+
+
+    <!-- BEAM DIAGRAM -->
+
+    <section class="card">
+
+        <h2>2. Beam Diagram</h2>
+
+        <svg class="diagram" viewBox="0 0 600 180"
+             role="img"
+             aria-label="Simply supported beam with a downward point load">
+
+            <!-- Beam -->
+            <line x1="60" y1="90"
+                  x2="540" y2="90"
+                  stroke="#334155" stroke-width="8"/>
+
+            <!-- Left support -->
+            <polygon points="60,95 45,120 75,120"
+                     fill="#64748b"/>
+
+            <!-- Right support -->
+            <polygon points="540,95 525,120 555,120"
+                     fill="#64748b"/>
+
+            <!-- Load arrow -->
+            <line id="loadArrow"
+                  x1="220" y1="20"
+                  x2="220" y2="78"
+                  stroke="#dc2626" stroke-width="4"/>
+
+            <polygon id="arrowHead"
+                     points="212,68 228,68 220,84"
+                     fill="#dc2626"/>
+
+            <text id="loadLabel"
+                  x="230" y="35"
+                  fill="#dc2626" font-size="15">
+                10 kN
+            </text>
+
+            <!-- Support labels -->
+            <text x="60" y="145"
+                  text-anchor="middle">A</text>
+
+            <text x="540" y="145"
+                  text-anchor="middle">B</text>
+
+            <!-- Beam span -->
+            <text id="spanLabel"
+                  x="300" y="165"
+                  text-anchor="middle">
+                Span: 6 m
+            </text>
+
+        </svg>
+
+        <p class="note">
+            The red arrow shows the downward point load.
+            Its position changes when you calculate.
+        </p>
+
+    </section>
+
+
+    <!-- RESULTS -->
+
+    <section class="card">
+
+        <h2>3. Support Reactions</h2>
+
+        <div class="results">
+
+            <div class="result">
+                <p>Left Support Reaction (RA)</p>
+                <strong id="leftResult">6.67 kN</strong>
+                <p>Upward</p>
+            </div>
+
+            <div class="result">
+                <p>Right Support Reaction (RB)</p>
+                <strong id="rightResult">3.33 kN</strong>
+                <p>Upward</p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <!-- ENGINEERING FORMULAS -->
+
+    <section class="card">
+
+        <h2>4. Engineering Principles</h2>
+
+        <p>The calculator uses static equilibrium:</p>
+
+        <p>Sum of vertical forces = 0</p>
+        <p>Sum of moments = 0</p>
+
+        <h3>Reaction Equations</h3>
+
+        <p>RA = P × (L - a) / L</p>
+        <p>RB = P × a / L</p>
+
+        <p class="note">
+            P = point load (kN)<br>
+            L = beam span (m)<br>
+            a = load distance from the left support (m)
+        </p>
+
+        <p class="note">
+            Assumes a simply supported beam with a single
+            downward point load and no applied moments.
+        </p>
+
+    </section>
+
+</div>
+
+<footer>
+    
+<footer>
+    <p>Developed by Yushua Hussain</p>
+    <p>
+        Contact:
+        <a href="mailto:yushuahussain8@gmail.com">
+            yushuahussain8@gmail.com
+        </a>
+    </p>
+</footer>
+
+</footer>
+
+
+<!-- CALCULATOR LOGIC -->
+
+<script>
+
+const form = document.getElementById("calculator");
+
+form.addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    // Read user inputs
+    const span = Number(
+        document.getElementById("span").value
+    );
+
+    const load = Number(
+        document.getElementById("load").value
+    );
+
+    const distance = Number(
+        document.getElementById("distance").value
+    );
+
+    const error = document.getElementById("error");
+
+    error.textContent = "";
+
+    // Validate inputs
+    if (
+        !Number.isFinite(span) ||
+        !Number.isFinite(load) ||
+        !Number.isFinite(distance) ||
+        span <= 0 ||
+        load < 0 ||
+        distance < 0 ||
+        distance > span
+    ) {
+        error.textContent =
+            "Enter valid values. The span must be positive, " +
+            "the load must be non-negative, and the load " +
+            "position must be within the beam.";
+        return;
+    }
+
+    // Calculate support reactions
+    const RA = load * ((span - distance) / span);
+    const RB = load * (distance / span);
+
+    if (!Number.isFinite(RA) ||
+        !Number.isFinite(RB)) {
+        error.textContent = "Input values are too large.";
+        return;
+    }
+
+    // Display results
+    document.getElementById("leftResult").textContent =
+        RA.toFixed(2) + " kN";
+
+    document.getElementById("rightResult").textContent =
+        RB.toFixed(2) + " kN";
+
+    // Update load position in beam diagram
+    const x = 60 + (distance / span) * 480;
+
+    const arrow = document.getElementById("loadArrow");
+
+    arrow.setAttribute("x1", x);
+    arrow.setAttribute("x2", x);
+
+    document.getElementById("arrowHead")
+        .setAttribute(
+            "points",
+            `${x-8},68 ${x+8},68 ${x},84`
+        );
+
+    const label = document.getElementById("loadLabel");
+
+    label.setAttribute("x", Math.min(x + 12, 510));
+    label.textContent = load + " kN";
+
+    document.getElementById("spanLabel").textContent =
+        "Span: " + span + " m";
+
+});
+
+</script>
+
+</body>
+</html>
+
